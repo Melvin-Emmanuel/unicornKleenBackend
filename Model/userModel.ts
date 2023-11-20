@@ -6,8 +6,7 @@ interface user {
   Password: string;
   Profile: {};
   Role: string;
-  Appointment: object[]
-  
+  Appointnment: [{}];
 }
 interface Iuser extends user, mongoose.Document { }
 
@@ -52,7 +51,19 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     Appointnment: {
-      type: [AppointmentSChema],
+      type: [
+        {
+          Title: { Type: String },
+          Location: { type: String },
+          Status: {
+            type: String,
+            enum: ["Pending", "completed", "Rejected"],
+          },
+          Duration: {
+            type: String,
+          },
+        },
+      ],
     },
   },
   { timestamps: true }

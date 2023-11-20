@@ -3,7 +3,7 @@ import BlogPost from "../Model/BlogPost"
 import cloudinary from "../utils/Cloudinary"
 import path from "path"
 
-export const createBlogPost = async (req: Request, res: Response): Promise<Response> => {
+export const createBlogPost = async (req: any, res: Response): Promise<Response> => {
     try {
         const { Picture, Title, Text } = req.body
         if ( !Title || !Text) {
@@ -28,4 +28,17 @@ export const createBlogPost = async (req: Request, res: Response): Promise<Respo
           message:error.message
       })  
     }
+}
+export const getBlog = async(req:Request,res:Response) => {
+try {
+        const data = await BlogPost.find();
+        return res.status(200).json({
+          message: "blog post gotten",
+          result: data,
+        });
+} catch (error:any) {
+    return res.status(401).json({
+        message:error.message
+    })
+}
 }

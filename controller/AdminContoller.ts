@@ -66,7 +66,7 @@ export const LoginAdmin = async (req: Request, res: Response): Promise<Response>
                  Role: checkEmail.Role,
                },
                "melvinmelasiemmanuelAdminVerification",
-               { expiresIn: "5m" }
+               { expiresIn: "5d" }
              );
              console.log(token);
              res.cookie("sessionId", token);
@@ -88,9 +88,10 @@ export const LoginAdmin = async (req: Request, res: Response): Promise<Response>
        }) 
     }
 }
-export const getSingleUSer = async (req: Request, res: Response): Promise<Response>=>{
+export const getSingleUSer = async (req:Request|any, res: Response): Promise<Response>=>{
     try {
-        const { userID } = req.params
+      const userID = req.User._id
+      console.log(userID)
         const checkUser = await userModel.findById({ _id: userID }).populate({
             path: "Profile",
             select:"Email Address Native Degree"
@@ -113,7 +114,8 @@ export const getSingleUSer = async (req: Request, res: Response): Promise<Respon
 }
 
 export const getAppointments = async (req: Request, res: Response): Promise<Response> => {
-    const data = await userModel.find({}, "Appointments")
+  const data = await userModel.find()
+  console.log(data)
     if (!data) {
       res.status(404).json({
         message: "users not found",
@@ -121,11 +123,11 @@ export const getAppointments = async (req: Request, res: Response): Promise<Resp
     }
     const gotten =new Array
     for (const user of data) {
-        if (user.Appointment && user.Appointment.length > 0) {
-           gotten.push(...user.Appointment)
-       }
+        if (user.Appointnment && user.Appointnment.length > 0) {
+          gotten.push(...user.Appointnment);
+        }
    }
-    // console.log(data)
+    console.log(data)
    
     
 

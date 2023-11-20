@@ -3,10 +3,12 @@ import express, { Request, Response } from "express";
 import ProfileModel from "../Model/ProfileModel";
 import cloudinary from "../utils/Cloudinary";
 import userModel from "../Model/userModel";
+import { AnyError } from "mongodb";
 
-export const UpdateProfile = async (req: Request, res: Response):Promise<Response> => {
+export const UpdateProfile = async (req:any, res: Response):Promise<Response> => {
   try {
-    const { userID } = req.params;
+    const  userID =req.User 
+    
     const checkuser = await userModel.findById(userID);
     if (!checkuser) {
       return res.status(404).json({

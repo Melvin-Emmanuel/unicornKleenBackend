@@ -4,7 +4,7 @@ declare module "*bcrypt"
 declare module "*jsonwebtoken";
 declare module "*path"
 declare module "*multer";
-// delcare module
+declare module "*google"
 // delcare module
 // delcare module
 // delcare module

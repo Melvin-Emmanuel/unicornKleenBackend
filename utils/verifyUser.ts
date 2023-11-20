@@ -15,7 +15,7 @@ export const verifyUser = async (req: any, res: any, next: any) => {
       if (err) {
         return res.status(404).json({ message: "token expire" });
       }
-      req.user = payload;
+      req.User = payload;
       next();
     });
   } else {

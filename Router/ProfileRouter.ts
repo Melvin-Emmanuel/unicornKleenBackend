@@ -6,6 +6,6 @@ import { verifyUser } from "../utils/verifyUser"
 const router = express.Router()
 
 
-router.route("/update-Profile/:userID").put(verifyUser, upload,UpdateProfile)
+router.route("/update-Profile").put(verifyUser, upload,UpdateProfile)
 
 export default router

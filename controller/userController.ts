@@ -64,7 +64,7 @@ export const createUser = async (req: Request, res: Response) => {
 export const CreateAPPointment= async(req: Request, res: Response):Promise<Response> => {
 try {
     const { userID } = req.params;
-    const checkUser = await userModel.findOne({ _id: userID });
+    const checkUser:any = await userModel.findOne({ _id: userID });
     console.log(checkUser);
     if (!checkUser) {
         
@@ -73,26 +73,34 @@ try {
         })
     }
 
-    if (checkUser?.Role.toLowerCase() === "user") {
+    if (checkUser?.Role.toLowerCase() === "worker") {
      return res.status(403).json({
         message: "permission denied",
       });
-    }
+      }
     const { Title, Location } = req.body;
     if (!Title || !Location) {
       return res.status(401).json({
         message: "fields cannot be empty",
       });
-    }
-    const newAppoint = {
+  }
+  interface getdata {
+    Date: Date,
+    Title: string,
+    Location: string,
+    Status: string,
+    Duration: string
+  }
+    const newAppoint:getdata = {
       Date: new Date(),
       Title: Title,
       Location: Location,
-      Status: "pending",
+      Status: "Pending",
       Duration: "2 hours",
     };
 
-    checkUser?.Appointment.push(newAppoint);
+  checkUser?.Appointnment.push(newAppoint);
+  // console.log(checkUser?.Appointnment);
     await checkUser?.save();
     return res.status(201).json({
       message: `Appointment created with ${checkUser?.FullName}`,
@@ -122,7 +130,7 @@ export const userLogin = async (
         const token: any = Jwt.sign(
           { _id: checkEmail._id, FullName: checkEmail.FullName,Role:checkEmail.Role},
           "melvinmelasiemmanuel",
-          { expiresIn: "5m" }
+          { expiresIn: "5d" }
         );
         console.log(token);
         res.cookie("sessionId", token);
