@@ -31,9 +31,9 @@ const storage2 = multer.diskStorage({
 });
 export const UploadBlog=multer({storage:storage2}).single("Picture")
 export const upload = multer({ storage: storage }).single("Avatar");
-export const uploaded = multer({ storage: storage }).fields([
-    {name:"Avatar", maxCount:"1"},
-    {name:"Cv", maxCount:"1"}
-]);
+// export const uploaded = multer({ storage: storage }).fields([
+//     {name:"Avatar", maxCount:"1"},
+//     {name:"Cv", maxCount:1}
+// ]);
 
 // export default upload;
