@@ -1,10 +1,10 @@
-declare module "*cors"
-declare module "*express"
-declare module "*bcrypt"
+declare module "*cors";
+declare module "*express";
+declare module "*bcrypt";
 declare module "*jsonwebtoken";
-declare module "*path"
+declare module "*path";
 declare module "*multer";
-declare module "*google"
+declare module "*google";
 // delcare module
 // delcare module
 // delcare module
