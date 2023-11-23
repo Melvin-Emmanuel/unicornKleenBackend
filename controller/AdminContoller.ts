@@ -124,7 +124,7 @@ export const getAppointments = async (req: Request, res: Response): Promise<Resp
     const gotten =new Array
     for (const user of data) {
         if (user.Appointnment && user.Appointnment.length > 0) {
-          gotten.push(...user.Appointnment);
+          gotten.push(...user.Appointnment)
         }
    }
     console.log(data)

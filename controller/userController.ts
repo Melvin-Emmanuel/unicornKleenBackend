@@ -63,9 +63,9 @@ export const createUser = async (req: Request, res: Response) => {
 };
 export const CreateAPPointment= async(req: Request, res: Response):Promise<Response> => {
 try {
-    const { userID } = req.params;
+    const { userID } = req.params
     const checkUser:any = await userModel.findOne({ _id: userID });
-    console.log(checkUser);
+    console.log(checkUser)
     if (!checkUser) {
         
         return res.status(404).json({
@@ -89,18 +89,18 @@ try {
     Title: string,
     Location: string,
     Status: string,
+    User:string,
     Duration: string
   }
     const newAppoint:getdata = {
       Date: new Date(),
       Title: Title,
       Location: Location,
+      User:checkUser?.FullName,
       Status: "Pending",
-      Duration: "2 hours",
-    };
-
-  checkUser?.Appointnment.push(newAppoint);
-  // console.log(checkUser?.Appointnment);
+      Duration: "2 hours"
+  }
+  await checkUser?.Appointnment.push(newAppoint)
     await checkUser?.save();
     return res.status(201).json({
       message: `Appointment created with ${checkUser?.FullName}`,
