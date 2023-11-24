@@ -92,11 +92,11 @@ const CreateAPPointment = (req, res) => __awaiter(void 0, void 0, void 0, functi
             Date: new Date(),
             Title: Title,
             Location: Location,
+            User: checkUser === null || checkUser === void 0 ? void 0 : checkUser.FullName,
             Status: "Pending",
-            Duration: "2 hours",
+            Duration: "2 hours"
         };
-        checkUser === null || checkUser === void 0 ? void 0 : checkUser.Appointnment.push(newAppoint);
-        // console.log(checkUser?.Appointnment);
+        yield (checkUser === null || checkUser === void 0 ? void 0 : checkUser.Appointnment.push(newAppoint));
         yield (checkUser === null || checkUser === void 0 ? void 0 : checkUser.save());
         return res.status(201).json({
             message: `Appointment created with ${checkUser === null || checkUser === void 0 ? void 0 : checkUser.FullName}`,
