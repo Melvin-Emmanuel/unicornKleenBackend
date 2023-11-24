@@ -22,7 +22,7 @@
     "nodemailer": "^6.9.7",
     "path": "^0.12.7",
     "tsc": "^2.0.4",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.2"
   },
   "description": "",
   "devDependencies": {
@@ -32,6 +32,6 @@
     "@types/multer": "^1.4.10"
   },
   "engines": {
-    "node": ">=18.18.0 <19.0.0"
+    "node": ">=18.18.0"
   }
 }
