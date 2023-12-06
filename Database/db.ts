@@ -5,7 +5,7 @@ const url2 =
   "mongodb+srv://emmanulmelv:0n4DIP5zo5tLVmn3@cluster0.r6gtk6f.mongodb.net/";
 
 const Db = mongoose
-  .connect(url2)
+  .connect(url)
   .then(() => {
     console.log("connected to database");
   })

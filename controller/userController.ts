@@ -33,6 +33,7 @@ export const createUser = async (req: Request, res: Response) => {
         
       
     });
+ 
     const createProfile = await ProfileModel.create({
       _id: UserData._id,
       FirstName: "",
@@ -61,17 +62,17 @@ export const createUser = async (req: Request, res: Response) => {
     });
   }
 };
-export const CreateAPPointment= async(req: Request, res: Response):Promise<Response> => {
+export const CreateAPPointment= async(req:any, res: Response):Promise<Response> => {
 try {
-    const { userID } = req.params
+    const  userID  = req.User
     const checkUser:any = await userModel.findOne({ _id: userID });
-    console.log(checkUser)
-    if (!checkUser) {
+    console.log("this isd checkuser",checkUser)
+    // if (!checkUser) {
         
-        return res.status(404).json({
-            message:"user does not exist"
-        })
-    }
+    //     return res.status(404).json({
+    //         message:"user does not exist"
+    //     })
+    // }
 
     if (checkUser?.Role.toLowerCase() === "worker") {
      return res.status(403).json({
@@ -84,6 +85,7 @@ try {
         message: "fields cannot be empty",
       });
   }
+ 
   interface getdata {
     Date: Date,
     Title: string,
@@ -100,12 +102,21 @@ try {
       Status: "Pending",
       Duration: "2 hours"
   }
-  await checkUser?.Appointnment.push(newAppoint)
-    await checkUser?.save();
-    return res.status(201).json({
-      message: `Appointment created with ${checkUser?.FullName}`,
-      appointmentStatus: newAppoint.Status,
-    });  
+  if (!checkUser) {
+      return res.status(201).json({
+        message: "appointment creted as a random user",
+      });
+
+  }
+
+       await checkUser?.Appointnment.push(newAppoint);
+       await checkUser?.save();
+       return res.status(201).json({
+         message: `Appointment created with ${checkUser?.FullName}`,
+         appointmentStatus: newAppoint.Status,
+       });  
+  
+
 } catch (error:any) {
    return  res.status(401).json({
         message:error.message
@@ -149,3 +160,16 @@ export const userLogin = async (
     return res.status(404).json({ message: error.message });
   }
 };
+
+export const userLogout = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie("sessionId")
+        return res.status(200).json({
+          message: "user logged out successfully",
+        });
+  } catch (error:any) {
+    return res.status(404).json({
+  message:error.message
+})
+  }
+}

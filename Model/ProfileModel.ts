@@ -11,7 +11,7 @@ interface Profile {
     Cv?: string
     Degree?:string
 }
-interface IProfile extends Profile, mongoose.Document {}
+interface IProfile extends Profile,mongoose.Document{}
 
 const ProfileSchema = new mongoose.Schema(
   {

@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 interface user {
   FullName: string;
@@ -8,29 +8,29 @@ interface user {
   Role: string;
   Appointnment: [{}];
 }
-interface Iuser extends user, mongoose.Document { }
+interface Iuser extends user, mongoose.Document {}
 
 const AppointmentSChema = new mongoose.Schema({
   Date: {
-    type:Date
+    type: Date,
   },
   Desc: {
-    type:String
+    type: String,
   },
   Location: {
-    type:String
+    type: String,
   },
   Status: {
-    type:String
+    type: String,
   },
   Duration: {
-    type:String
-  }, 
+    type: String,
+  },
   Profile: {
     type: mongoose.Schema.Types.ObjectId,
-    ref:"Profile"
-  }
-})
+    ref: "Profile",
+  },
+});
 
 const userSchema = new mongoose.Schema(
   {
@@ -49,6 +49,7 @@ const userSchema = new mongoose.Schema(
     },
     Role: {
       type: String,
+      enum:["User","Worker"]
     },
     Appointnment: {
       type: [

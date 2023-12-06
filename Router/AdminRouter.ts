@@ -1,6 +1,7 @@
 import express from "express";
 import {
   LoginAdmin,
+  createWorker,
   getAllUser,
   getAppointments,
   getSingleUSer,
@@ -15,6 +16,7 @@ router
   .route("/Admin-get-appointments").get(getAppointments)
   .get(verifyAdmin, getAppointments);
 router.route("/Admin-get-all-users").get(verifyAdmin, getAllUser);
-router.route("/Admin-get-Single-user").get(verifyAdmin,getSingleUSer)
+router.route("/Admin-get-Single-user").get(verifyAdmin, getSingleUSer)
+router.route("/createWorker").post(verifyAdmin,createWorker)
 
 export default router;

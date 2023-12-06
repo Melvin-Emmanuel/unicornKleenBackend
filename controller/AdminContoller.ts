@@ -3,6 +3,7 @@ import userModel from "../Model/userModel"
 import AdminModel from "../Model/AdminModel"
 import bcrypt from "bcrypt";
 import Jwt from "jsonwebtoken"
+import fs from "fs"
 
 export const getAllUser = async (req: Request, res: Response): Promise<Response> => {
     // const checkuser = await userModel.findOne({ _id: req.params.userId })
@@ -22,7 +23,13 @@ export const getAllUser = async (req: Request, res: Response): Promise<Response>
 
 export const regAdmin = async (req: Request, res: Response): Promise<Response>=>{
     try {
-        const { CompanyName, Email, Password } = req.body
+      const { CompanyName, Email, Password } = req.body
+      const checkadmin = await AdminModel.find({ Email: Email })
+      if (checkadmin) {
+        return res.status(401).json({
+          message:"this admin already exists"
+        })
+      }
         if (!CompanyName || !Email || !Password)
             return res.status(410).json({
                 message: "all field required",
@@ -136,4 +143,63 @@ export const getAppointments = async (req: Request, res: Response): Promise<Resp
         message: "appointment gotten",
         result:gotten
     })
+}
+export const createWorker = async (req: Request, res: Response):Promise<Response> => {
+  try {
+    function generateRandomPassword(length:any) {
+      const charset =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+";
+      let password = "";
+
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * charset.length);
+        password += charset.charAt(randomIndex);
+      }
+
+      return password;
+    }
+    console.log("thisis me")
+    const { FullName, Email, Password, Role } = req.body
+    const generatedpass = generateRandomPassword(8);
+   
+     const salt = await bcrypt.genSalt(10);
+     const hashed = await bcrypt.hash(generatedpass, salt);
+       if (!Email || !Password || !FullName) {
+       return res.status(401).json({
+         Message: "All fields required",
+       });
+     }
+
+    const create = await userModel.create({
+      FullName,
+      Email,
+      Password:hashed,
+      Role,
+    })
+  
+  
+     const userlogindetails = {
+       username: Email,
+       passkey: generatedpass,
+    };
+    const data=JSON.stringify(userlogindetails,null,2)
+    await fs.writeFile("workers/password.txt", data, (err) => {
+      if (err) {
+        return res.status(401).json({
+           message:"there was an error writing file"
+         })
+      } else {
+        console.log("password witten successfully")
+      }
+    });
+      return res.status(201).json({
+        message: create,
+      });
+    
+    
+  } catch (error:any) {
+    return res.status(404).json({
+      message:error.message
+    })
+  }
 }

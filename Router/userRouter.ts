@@ -3,6 +3,7 @@ import {
   CreateAPPointment,
   createUser,
   userLogin,
+  userLogout,
 } from "../controller/userController";
 import { verifyUser } from "../utils/verifyUser";
 
@@ -12,6 +13,7 @@ router.route("/reg-user").post(createUser);
 router.route("/login-User").post(userLogin);
 router
   .route("/create-Appointment/:userID")
-  .post(verifyUser, CreateAPPointment);
+  .post(CreateAPPointment);
+  router.route("/logout").get(userLogout)
 
 export default router;

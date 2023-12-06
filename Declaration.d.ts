@@ -5,6 +5,7 @@ declare module "*jsonwebtoken";
 declare module "*path";
 declare module "*multer";
 declare module "*google";
+declare module "*mongoose";
 // delcare module
 // delcare module
 // delcare module
