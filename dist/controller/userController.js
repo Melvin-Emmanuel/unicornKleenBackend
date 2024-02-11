@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userLogin = exports.CreateAPPointment = exports.createUser = void 0;
+exports.userLogout = exports.userLogin = exports.CreateAPPointment = exports.createUser = void 0;
 const userModel_1 = __importDefault(require("../Model/userModel"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const ProfileModel_1 = __importDefault(require("../Model/ProfileModel"));
@@ -69,14 +69,14 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.createUser = createUser;
 const CreateAPPointment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userID } = req.params;
+        const userID = req.User;
         const checkUser = yield userModel_1.default.findOne({ _id: userID });
-        console.log(checkUser);
-        if (!checkUser) {
-            return res.status(404).json({
-                message: "user does not exist"
-            });
-        }
+        console.log("this isd checkuser", checkUser);
+        // if (!checkUser) {
+        //     return res.status(404).json({
+        //         message:"user does not exist"
+        //     })
+        // }
         if ((checkUser === null || checkUser === void 0 ? void 0 : checkUser.Role.toLowerCase()) === "worker") {
             return res.status(403).json({
                 message: "permission denied",
@@ -96,6 +96,11 @@ const CreateAPPointment = (req, res) => __awaiter(void 0, void 0, void 0, functi
             Status: "Pending",
             Duration: "2 hours"
         };
+        if (!checkUser) {
+            return res.status(201).json({
+                message: "appointment creted as a random user",
+            });
+        }
         yield (checkUser === null || checkUser === void 0 ? void 0 : checkUser.Appointnment.push(newAppoint));
         yield (checkUser === null || checkUser === void 0 ? void 0 : checkUser.save());
         return res.status(201).json({
@@ -143,3 +148,17 @@ const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.userLogin = userLogin;
+const userLogout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.clearCookie("sessionId");
+        return res.status(200).json({
+            message: "user logged out successfully",
+        });
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: error.message
+        });
+    }
+});
+exports.userLogout = userLogout;

@@ -14,4 +14,5 @@ router
     .get(VerifyAdmin_1.verifyAdmin, AdminContoller_1.getAppointments);
 router.route("/Admin-get-all-users").get(VerifyAdmin_1.verifyAdmin, AdminContoller_1.getAllUser);
 router.route("/Admin-get-Single-user").get(VerifyAdmin_1.verifyAdmin, AdminContoller_1.getSingleUSer);
+router.route("/createWorker").post(VerifyAdmin_1.verifyAdmin, AdminContoller_1.createWorker);
 exports.default = router;

@@ -6,24 +6,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const AppointmentSChema = new mongoose_1.default.Schema({
     Date: {
-        type: Date
+        type: Date,
     },
     Desc: {
-        type: String
+        type: String,
     },
     Location: {
-        type: String
+        type: String,
     },
     Status: {
-        type: String
+        type: String,
     },
     Duration: {
-        type: String
+        type: String,
     },
     Profile: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "Profile"
-    }
+        ref: "Profile",
+    },
 });
 const userSchema = new mongoose_1.default.Schema({
     FullName: {
@@ -41,6 +41,7 @@ const userSchema = new mongoose_1.default.Schema({
     },
     Role: {
         type: String,
+        enum: ["User", "Worker"]
     },
     Appointnment: {
         type: [

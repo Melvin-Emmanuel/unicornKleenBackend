@@ -22,6 +22,19 @@ const CreateContactUs = (req, res) => __awaiter(void 0, void 0, void 0, function
                 message: "all fields must be filled"
             });
         }
+        const checkExisting = yield ContactUsModel_1.default.findOne({ Email }).sort({
+            CreatedAt: -1,
+        });
+        if (checkExisting) {
+            const timeDifference = Date.now();
+            //  Date.now() - checkExisting?.createdAt.getTime();
+            const submissionInterval = 24 * 60 * 60 * 1000; // 24 hours
+            if (timeDifference < submissionInterval) {
+                return res.status(400).json({
+                    error: "Too frequent submissions. Please wait before submitting again.",
+                });
+            }
+        }
         const data = yield ContactUsModel_1.default.create({
             Name,
             Email,

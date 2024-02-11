@@ -12,7 +12,7 @@ const ContactSchema = new mongoose_1.default.Schema({
         type: String
     },
     PhoneNumber: {
-        typpe: String
+        type: String
     },
     Text: {
         type: String

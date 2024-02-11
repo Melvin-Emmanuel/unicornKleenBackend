@@ -159,12 +159,12 @@ export const createWorker = async (req: Request, res: Response):Promise<Response
       return password;
     }
     console.log("thisis me")
-    const { FullName, Email, Password, Role } = req.body
+    const { FullName, Email} = req.body
     const generatedpass = generateRandomPassword(8);
    
      const salt = await bcrypt.genSalt(10);
      const hashed = await bcrypt.hash(generatedpass, salt);
-       if (!Email || !Password || !FullName) {
+       if (!Email ||  !FullName) {
        return res.status(401).json({
          Message: "All fields required",
        });
@@ -174,7 +174,7 @@ export const createWorker = async (req: Request, res: Response):Promise<Response
       FullName,
       Email,
       Password:hashed,
-      Role,
+      Role:"Worker"
     })
   
   
@@ -183,7 +183,7 @@ export const createWorker = async (req: Request, res: Response):Promise<Response
        passkey: generatedpass,
     };
     const data=JSON.stringify(userlogindetails,null,2)
-    await fs.writeFile("workers/password.txt", data, (err) => {
+    await fs.writeFile("password.txt", data, (err) => {
       if (err) {
         return res.status(401).json({
            message:"there was an error writing file"

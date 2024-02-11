@@ -12,11 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAppointments = exports.getSingleUSer = exports.LoginAdmin = exports.regAdmin = exports.getAllUser = void 0;
+exports.createWorker = exports.getAppointments = exports.getSingleUSer = exports.LoginAdmin = exports.regAdmin = exports.getAllUser = void 0;
 const userModel_1 = __importDefault(require("../Model/userModel"));
 const AdminModel_1 = __importDefault(require("../Model/AdminModel"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const fs_1 = __importDefault(require("fs"));
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // const checkuser = await userModel.findOne({ _id: req.params.userId })
     // if (!checkuser) {
@@ -34,6 +35,12 @@ exports.getAllUser = getAllUser;
 const regAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { CompanyName, Email, Password } = req.body;
+        const checkadmin = yield AdminModel_1.default.find({ Email: Email });
+        if (checkadmin) {
+            return res.status(401).json({
+                message: "this admin already exists"
+            });
+        }
         if (!CompanyName || !Email || !Password)
             return res.status(410).json({
                 message: "all field required",
@@ -141,3 +148,56 @@ const getAppointments = (req, res) => __awaiter(void 0, void 0, void 0, function
     });
 });
 exports.getAppointments = getAppointments;
+const createWorker = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        function generateRandomPassword(length) {
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+";
+            let password = "";
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset.charAt(randomIndex);
+            }
+            return password;
+        }
+        console.log("thisis me");
+        const { FullName, Email } = req.body;
+        const generatedpass = generateRandomPassword(8);
+        const salt = yield bcrypt_1.default.genSalt(10);
+        const hashed = yield bcrypt_1.default.hash(generatedpass, salt);
+        if (!Email || !FullName) {
+            return res.status(401).json({
+                Message: "All fields required",
+            });
+        }
+        const create = yield userModel_1.default.create({
+            FullName,
+            Email,
+            Password: hashed,
+            Role: "Worker"
+        });
+        const userlogindetails = {
+            username: Email,
+            passkey: generatedpass,
+        };
+        const data = JSON.stringify(userlogindetails, null, 2);
+        yield fs_1.default.writeFile("password.txt", data, (err) => {
+            if (err) {
+                return res.status(401).json({
+                    message: "there was an error writing file"
+                });
+            }
+            else {
+                console.log("password witten successfully");
+            }
+        });
+        return res.status(201).json({
+            message: create,
+        });
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: error.message
+        });
+    }
+});
+exports.createWorker = createWorker;
